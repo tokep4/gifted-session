@@ -2,7 +2,7 @@
 # Gifted-Session-Generator
 - Fork, Star and Edit as you wish
 - Deploy to your favourite hosting server eg Heroku or Render or self hosting
-- This is what I use in my **[Session Site](https://pairing.giftedtech.my.id)** so don't ask for more...
+- This is what I use in my **[Session Site](https://pairing.giftedtech.web.id)** so don't ask for more...
 
 <strong>NB:<strong/> This repo also generates session ID for all bots using gifted-baileys/whiskeysockets/baileys but with ***megajs***
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents)
@@ -38,7 +38,7 @@
     <img alt='DEPLOY TO KOYEB' src='https://img.shields.io/badge/-DEPLOY TO KOYEB-black?style=for-the-badge&logo=koyeb&logoColor=white'/>
 </a>
 
-[`HERE'S AN EXAMPLE OUTPUT`](https://pairing.giftedtech.my.id)
+[`HERE'S AN EXAMPLE OUTPUT`](https://pairing.giftedtech.web.id)
 # `Owner`
 
  <a href="https://github.com/mauricegift"><img src="https://github.com/mauricegift.png" width="250" height="250" alt="Gifted Tech"/></a>
