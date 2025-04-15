@@ -9,7 +9,8 @@
    
 ```js
 // 1. IN YOUR LIB OR SOMEWHERE YOU LIKE:
-const fs = require('fs'), 
+const fs = require('fs'),
+      path = require('path'), 
       axios = require('axios'),
       sessionDir = path.join(__dirname, 'session'),
       credsPath = path.join(sessionDir, 'creds.json'),
