@@ -325,7 +325,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* Mobile Styles */
         @media (max-width: 768px) {
             .menu {
                 position: fixed;
@@ -363,6 +362,25 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Right-click restriction message */
+        #rightClickMessage {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(26, 26, 46, 0.95);
+            color: var(--accent);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            z-index: 9999;
+            font-size: 1.2rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -378,12 +396,12 @@
             </button>
             
             <div class="menu" id="menu">
-                <a href="https://github.com/mauricegift/gifted-md" target="_blank"><i class="fab fa-github"></i> Bot Repo</a>
+                <a href="#" data-url="https://github.com/mauricegift/gifted-md" target="_blank"><i class="fab fa-github"></i> Bot Repo</a>
                 <a href="./pair"><i class="fas fa-link"></i> Pair Code</a>
                 <a href="./qr"><i class="fas fa-qrcode"></i> QR Code</a>
                 <a href="./validate"><i class="fas fa-check-circle"></i> Session Validator</a>
-                <a href="https://t.me/mouricedevs" target="_blank"><i class="fab fa-telegram"></i> Contact Support</a>
-                <a href="https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y" target="_blank"><i class="fab fa-whatsapp"></i> Updates WaChannel</a>
+                <a href="#" data-url="https://t.me/mouricedevs" target="_blank"><i class="fab fa-telegram"></i> Contact Support</a>
+                <a href="#" data-url="https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y" target="_blank"><i class="fab fa-whatsapp"></i> Updates WaChannel</a>
             </div>
         </div>
     </nav>
@@ -402,41 +420,41 @@
     Explore Gifted-MD
 </h2>
         <div class="cards-container">
-            <a href="https://github.com/mauricegift/gifted-md" target="_blank" class="card">
+            <div class="card" data-url="https://github.com/mauricegift/gifted-md" target="_blank">
                 <i class="fab fa-github"></i>
                 <h3>Bot Repo</h3>
                 <p>Check out the Source Code</p>
-            </a>
+            </div>
             
-            <a href="./pair" class="card">
+            <div class="card" data-url="./pair">
                 <i class="fas fa-link"></i>
                 <h3>Pair Code</h3>
                 <p>Connect Via Pairing Code</p>
-            </a>
+            </div>
             
-            <a href="./qr" class="card">
+            <div class="card" data-url="./qr">
                 <i class="fas fa-qrcode"></i>
                 <h3>QR Code</h3>
                 <p>Connect Via Scanning QR Code</p>
-            </a>
+            </div>
             
-            <a href="./validate" class="card">
+            <div class="card" data-url="./validate">
                 <i class="fas fa-check-circle"></i>
                 <h3>Validator</h3>
                 <p>Validate your Session ID</p>
-            </a>
+            </div>
             
-            <a href="https://t.me/mouricedevs" target="_blank" class="card">
+            <div class="card" data-url="https://t.me/mouricedevs" target="_blank">
                 <i class="fab fa-telegram"></i>
                 <h3>Owner</h3>
                 <p>Contact for Support</p>
-            </a>
+            </div>
             
-            <a href="https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y" target="_blank" class="card">
+            <div class="card" data-url="https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y" target="_blank">
                 <i class="fab fa-whatsapp"></i>
                 <h3>Wa Channel</h3>
                 <p>Join for Updates & Announcements</p>
-            </a>
+            </div>
         </div>
     </section>
 
@@ -449,15 +467,17 @@
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="https://github.com/mauricegift/gifted-md" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://t.me/mouricedevs" target="_blank"><i class="fab fa-telegram"></i></a>
-                <a href="https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" data-url="https://github.com/mauricegift/gifted-md" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" data-url="https://t.me/mouricedevs" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="#" data-url="https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div>
             <p class="copyright">
-                &copy; <span id="currentYear"></span> Made by <a href="https://www.giftedtech.web.id" target="_blank">Gifted Tech</a>
+                &copy; <span id="currentYear"></span> Made by <a href="#" data-url="https://www.giftedtech.web.id" target="_blank">Gifted Tech</a>
             </p>
         </div>
     </footer>
+
+    <div id="rightClickMessage">Action Prohibited by Gifted Tech</div>
 
     <script>
         const menuToggle = document.getElementById('menuToggle');
@@ -490,6 +510,34 @@
 
         cards.forEach(card => {
             observer.observe(card);
+        });
+
+        document.querySelectorAll('[data-url]').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('data-url');
+                const target = this.getAttribute('target') || '_self';
+                window.open(url, target);
+            });
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            const message = document.getElementById('rightClickMessage');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 2000);
+        });
+
+        document.querySelectorAll('[data-url]').forEach(link => {
+            link.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+            });
+        });
+
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
         });
     </script>
 </body>
