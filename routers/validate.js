@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
     const { sessionId } = req.body;
 
     if (!sessionId) {
-        return res.status(400).json({ error: 'Session ID is required' });
+        return res.status(400).json({ error: 'Session ID is Required' });
     }
 
     try {
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
         if (!decrypted) {
             return res.status(400).json({
                 valid: false,
-                error: 'Session ID not found or invalid'
+                error: 'Session ID not Found in Database or is Invalid'
             });
         }
 
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const credsPath = path.join(tempDir, `creds-${timestamp}.json`);
         await fs.writeFile(credsPath, JSON.stringify(decrypted, null, 2), 'utf8');
-        console.log("Session File Saved for Inspection:", credsPath);
+        // console.log("Session File Saved for Inspection:", credsPath);
 
         const hasAppStateKey = decrypted.myAppStateKeyId && decrypted.myAppStateKeyId.length >= 3;
 
@@ -44,12 +44,12 @@ router.post('/', async (req, res) => {
         };
 
         const resultMessage = isValid 
-            ? '✅ Valid Session ID. You can proceed with bot deployment.' 
-            : '❌ Incomplete session data. The bot may not work properly. Please relink your account.';
+            ? '✅ Valid Session ID. You can Proceed With Your Bot Deployment.' 
+            : '❌ Incomplete Session Data. The Bot Will Not Respond When Deployed. Please Log Out And Relink.';
 
         try {
             await fs.unlink(credsPath);
-            console.log('Temporary file deleted');
+            // console.log('Temporary file deleted');
         } catch (unlinkErr) {
             console.error('Error deleting temporary file:', unlinkErr);
         }
