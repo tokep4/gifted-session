@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
         };
 
         const resultMessage = isValid 
-            ? '✅ Valid Session ID. You can Proceed With Your Bot Deployment.' 
+            ? '✅ Session ID is Valid. You Can Proceed With Bot Deployment.' 
             : '❌ Incomplete Session Data. The Bot Will Not Respond When Deployed. Please Log Out And Relink.';
 
         try {
