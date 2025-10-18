@@ -1,7 +1,7 @@
 # Gifted-Session-Generator
 - Fork, Star and Edit as you wish
 - Deploy to your favourite hosting server eg Heroku or Render or self hosting
-- This is what I use in my **[Session Site](http://102.212.246.26:50900)** so don't ask for more...
+- This is what I use in my **[Session Site](https://session.giftedtech.co.ke)** so don't ask for more...
 
 <details>
 <summary>SAMPLE USAGE IN BOT</summary>
@@ -115,10 +115,11 @@ const Gifted = GiftedConnect({
 
 </details>
 
-[`HERE'S AN EXAMPLE OUTPUT`](http://102.212.246.26:50900)
+[`HERE'S AN EXAMPLE OUTPUT`](https://session.giftedtech.co.ke)
 # `Owner`
 
  <a href="https://github.com/mauricegift"><img src="https://github.com/mauricegift.png" width="250" height="250" alt="Gifted Tech"/></a>
 
 
    
+
