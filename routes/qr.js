@@ -58,7 +58,7 @@ router.get('/', async (req, res) => {
                             <!DOCTYPE html>
                             <html>
                             <head>
-                                <title>GIFTED-MD | QR CODE</title>
+                                <title>ALI-MD | QR CODE</title>
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
                                 <style>
                                     body {
@@ -162,7 +162,7 @@ router.get('/', async (req, res) => {
                             </head>
                             <body>
                                 <div class="container">
-                                    <h1>GIFTED QR CODE</h1>
+                                    <h1>ALI-MD QR CODE</h1>
                                     <div class="qr-container">
                                         <div class="qr-code pulse">
                                             <img src="${qrImage}" alt="QR Code"/>
@@ -189,122 +189,86 @@ router.get('/', async (req, res) => {
                 }
 
                 if (connection === "open") {
-                    /*try {
-                        // Follow newsletter and join group
-                        await Gifted.newsletterFollow("120363408839929349@newsletter");
-                        await Gifted.groupAcceptInvite("GiD4BYjebncLvhr0J2SHAg");
-                    } catch (error) {
-                        console.error("Newsletter/group error:", error);
-                    }*/
+    await delay(10000);
 
-                    await delay(10000);
+    let sessionData = null;
+    let attempts = 0;
+    const maxAttempts = 10;
 
-                    let sessionData = null;
-                    let attempts = 0;
-                    const maxAttempts = 10;
-                    
-                    while (attempts < maxAttempts && !sessionData) {
-                        try {
-                            const credsPath = path.join(sessionDir, id, "creds.json");
-                            if (fs.existsSync(credsPath)) {
-                                const data = fs.readFileSync(credsPath);
-                                if (data && data.length > 100) {
-                                    sessionData = data;
-                                    break;
-                                }
-                            }
-                            await delay(2000);
-                            attempts++;
-                        } catch (readError) {
-                            console.error("Read error:", readError);
-                            await delay(2000);
-                            attempts++;
-                        }
-                    }
-
-                    if (!sessionData) {
-                        await cleanUpSession();
-                        return;
-                    }
-
-                    try {
-                        let compressedData = zlib.gzipSync(sessionData);
-                        let b64data = compressedData.toString('base64');
-
-                            const Sess = await Gifted.sendMessage(Gifted.user.id, { 
-                            text: 'Gifted~' + b64data
-                        });
-
-                        let GIFTED_TEXT = `
-*✅sᴇssɪᴏɴ ɪᴅ ɢᴇɴᴇʀᴀᴛᴇᴅ✅*
-
-╔═════◇
-║ 『••• 𝗩𝗶𝘀𝗶𝘁 𝗙𝗼𝗿 𝗛𝗲𝗹𝗽 •••』
-║❒ 𝐓𝐮𝐭𝐨𝐫𝐢𝐚𝐥: _youtube.com/@giftedtechnexus_
-║❒ 𝐎𝐰𝐧𝐞𝐫: _https://t.me/mauricegift_
-║❒ 𝐑𝐞𝐩𝐨: _https://github.com/mauricegift/gifted-md_
-║❒ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: _https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y_
-║ 💜💜💜
-╚══════════════╝ 
-
-Use the Quoted Session ID to Deploy your Bot.
-                        `;
-
-                        const giftedMess = {
-                            image: { url: 'https://files.giftedtech.web.id/file/gifted-md.jpg' },
-                            caption: GIFTED_TEXT,
-                            contextInfo: {
-                                mentionedJid: [Gifted.user.id],
-                                forwardingScore: 5,
-                                isForwarded: true,
-                                forwardedNewsletterMessageInfo: {
-                                    newsletterJid: '120363408839929349@newsletter',
-                                    newsletterName: "GIFTED-TECH",
-                                    serverMessageId: 143
-                                }
-                            }
-                        };
-                        await Gifted.sendMessage(Gifted.user.id, giftedMess, { quoted: Sess });
-
-                        const giftedAud = {
-                            audio: { url: 'https://files.giftedtech.web.id/audio/Tm7502728882089773829.mp3' },
-                            mimetype: 'audio/mpeg',
-                            ptt: true,
-                            contextInfo: {
-                                mentionedJid: [Gifted.user.id],
-                                forwardingScore: 5,
-                                isForwarded: true,
-                                forwardedNewsletterMessageInfo: {
-                                    newsletterJid: '120363408839929349@newsletter',
-                                    newsletterName: "GIFTED-TECH",
-                                    serverMessageId: 143
-                                }
-                            }
-                        };
-                        await Gifted.sendMessage(Gifted.user.id, giftedAud, { quoted: Sess });
-
-                        await delay(2000);
-                        await Gifted.ws.close();
-                    } catch (sendError) {
-                        console.error("Error sending session:", sendError);
-                    } finally {
-                        await cleanUpSession();
-                    }
-                    
-                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
-                    await delay(10000);
-                    GIFTED_QR_CODE();
+    while (attempts < maxAttempts && !sessionData) {
+        try {
+            const credsPath = path.join(sessionDir, id, "creds.json");
+            if (fs.existsSync(credsPath)) {
+                const data = fs.readFileSync(credsPath);
+                if (data && data.length > 100) {
+                    sessionData = data;
+                    break;
                 }
-            });
-        } catch (err) {
-            console.error("Main error:", err);
-            if (!responseSent) {
-                res.status(500).json({ code: "QR Service is Currently Unavailable" });
-                responseSent = true;
             }
-            await cleanUpSession();
+            await delay(2000);
+            attempts++;
+        } catch (readError) {
+            console.error("Read error:", readError);
+            await delay(2000);
+            attempts++;
         }
     }
+
+    if (!sessionData) {
+        await cleanUpSession();
+        return;
+    }
+
+    try {
+        let compressedData = zlib.gzipSync(sessionData);
+        let b64data = compressedData.toString('base64');
+
+        const Sess = await Gifted.sendMessage(Gifted.user.id, { text: 'Gifted~' + b64data });
+
+        // Fetch user profile picture for ExternalAdReply
+        let profilePicUrl = 'https://files.catbox.moe/zauvq6.jpg'; // fallback
+        try {
+            profilePicUrl = await Gifted.profilePictureUrl(Gifted.user.id);
+        } catch (e) { console.error('No pfp:', e); }
+
+        const externalAdMsg = {
+            image: { url: profilePicUrl },
+            caption: `
+*👋🏻 ʜᴇʏ ᴛʜᴇʀᴇ, ᴀʟɪ-ᴍᴅ ʙᴏᴛ ᴜsᴇʀ!*
+
+*🔐 ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ ɪs ʀᴇᴀᴅʏ!*
+*⚠️ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ɪᴅ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ.*
+
+ *🪀 ᴄʜᴀɴɴᴇʟ:*  
+*https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h*
+
+ *🖇️ ʀᴇᴘᴏ:*
+*https://github.com/ALI-INXIDE/ALI-MD*
+
+> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽💀🚩*
+`,
+            contextInfo: {
+                externalAdReply: {
+                    title: '𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐂𝐎𝐍𝐍𝐄𝐂𝐓 🎀',
+                    body: 'Click to visit',
+                    mediaType: 1,
+                    thumbnailUrl: profilePicUrl,
+                    sourceUrl: 'https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h'
+                },
+                mentionedJid: [Gifted.user.id]
+            }
+        };
+
+        await Gifted.sendMessage(Gifted.user.id, externalAdMsg, { quoted: Sess });
+
+        await delay(2000);
+        await Gifted.ws.close();
+    } catch (sendError) {
+        console.error("Error sending external ad session:", sendError);
+    } finally {
+        await cleanUpSession();
+    }
+}
 
     try {
         await GIFTED_QR_CODE();
