@@ -38,8 +38,7 @@ router.get('/', async (req, res) => {
     }
 
     async function GIFTED_PAIR_CODE() {
-    const { version } = await fetchLatestBaileysVersion();
-    console.log(version);
+        const { version } = await fetchLatestBaileysVersion();
         const { state, saveCreds } = await useMultiFileAuthState(path.join(sessionDir, id));
         try {
             let Gifted = giftedConnect({
@@ -78,126 +77,55 @@ router.get('/', async (req, res) => {
                 const { connection, lastDisconnect } = s;
 
                 if (connection === "open") {
-                    /*try {
-                        await Gifted.newsletterFollow("120363408839929349@newsletter");
-                        await Gifted.groupAcceptInvite("GiD4BYjebncLvhr0J2SHAg");
-                    } catch (error) {
-                        console.error("Newsletter/group error:", error);
-                    }*/
-                    
                     await delay(8000);
                     
-                    let sessionData = null;
-                    let attempts = 0;
-                    const maxAttempts = 15;
-                    
-                    while (attempts < maxAttempts && !sessionData) {
-                        try {
-                            const credsPath = path.join(sessionDir, id, "creds.json");
-                            if (fs.existsSync(credsPath)) {
-                                const data = fs.readFileSync(credsPath);
-                                if (data && data.length > 100) {
-                                    sessionData = data;
-                                    break;
-                                }
-                            }
-                            await delay(2000);
-                            attempts++;
-                        } catch (readError) {
-                            console.error("Read error:", readError);
-                            await delay(2000);
-                            attempts++;
-                        }
-                    }
-
-                    if (!sessionData) {
+                    const credsPath = path.join(sessionDir, id, "creds.json");
+                    if (!fs.existsSync(credsPath)) {
                         await cleanUpSession();
                         return;
                     }
-                    
+
                     try {
-                        let compressedData = zlib.gzipSync(sessionData);
-                        let b64data = compressedData.toString('base64');
-                        await delay(5000); 
+                        const sessionData = fs.readFileSync(credsPath);
+                        const compressedData = zlib.gzipSync(sessionData);
+                        const b64data = compressedData.toString('base64');
 
-                        let sessionSent = false;
-                        let sendAttempts = 0;
-                        const maxSendAttempts = 5;
-                        let Sess = null;
+                        const Sess = await Gifted.sendMessage(Gifted.user.id, { text: 'Gifted~' + b64data });
 
-                        while (sendAttempts < maxSendAttempts && !sessionSent) {
-                            try {
-                                Sess = await Gifted.sendMessage(Gifted.user.id, {
-                                    text: 'Gifted~' + b64data
-                                });
-                                sessionSent = true;
-                            } catch (sendError) {
-                                console.error("Send error:", sendError);
-                                sendAttempts++;
-                                if (sendAttempts < maxSendAttempts) {
-                                    await delay(3000);
-                                }
-                            }
+                        let pfp;
+                        try { 
+                            pfp = await Gifted.profilePictureUrl(Gifted.user.id, 'image'); 
+                        } catch {
+                            pfp = 'https://files.catbox.moe/zauvq6.jpg';
                         }
 
-                        if (!sessionSent) {
-                            await cleanUpSession();
-                            return;
-                        }
+                        const GIFTED_TEXT = `
+*👋🏻 ʜᴇʏ ᴛʜᴇʀᴇ, ᴀʟɪ-ᴍᴅ ʙᴏᴛ ᴜsᴇʀ!*
 
-                        await delay(3000);
+*🔐 ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ ɪs ʀᴇᴀᴅʏ!*
+*⚠️ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ɪᴅ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ.*
 
-                        let GIFTED_TEXT = `
-*✅sᴇssɪᴏɴ ɪᴅ ɢᴇɴᴇʀᴀᴛᴇᴅ✅*
+ *🪀 ᴄʜᴀɴɴᴇʟ:*  
+*https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h*
 
-╔═════◇
-║ 『••• 𝗩𝗶𝘀𝗶𝘁 𝗙𝗼𝗿 𝗛𝗲𝗹𝗽 •••』
-║❒ 𝐓𝐮𝐭𝐨𝐫𝐢𝐚𝐥: _youtube.com/@giftedtechnexus_
-║❒ 𝐎𝐰𝐧𝐞𝐫: _https://t.me/mouricedevs_
-║❒ 𝐑𝐞𝐩𝐨: _https://github.com/mauricegift/gifted-md_
-║❒ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: _https://whatsapp.com/channel/0029Vb3hlgX5kg7G0nFggl0Y_
-║ 💜💜💜
-╚══════════════╝ 
+ *🖇️ ʀᴇᴘᴏ:*
+*https://github.com/ALI-INXIDE/ALI-MD*
 
-Use the Quoted Session ID to Deploy your Bot.
+> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽💀🚩*
 `;
 
-                        try {
-                            const giftedMess = {
-                                image: { url: 'https://files.giftedtech.web.id/file/gifted-md.jpg' },
-                                caption: GIFTED_TEXT,
-                                contextInfo: {
-                                    mentionedJid: [Gifted.user.id],
-                                    forwardingScore: 5,
-                                    isForwarded: true,
-                                    forwardedNewsletterMessageInfo: {
-                                        newsletterJid: '120363408839929349@newsletter',
-                                        newsletterName: "GIFTED-TECH",
-                                        serverMessageId: 143
-                                    }
+                        await Gifted.sendMessage(Gifted.user.id, { 
+                            text: GIFTED_TEXT, 
+                            contextInfo: { 
+                                externalAdReply: { 
+                                    title: '𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐂𝐎𝐍𝐍𝐄𝐂𝐓 🎀', 
+                                    thumbnailUrl: pfp, 
+                                    sourceUrl: 'https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h', 
+                                    mediaType: 1, 
+                                    renderLargerThumbnail: true
                                 }
-                            };
-                            await Gifted.sendMessage(Gifted.user.id, giftedMess, { quoted: Sess });
-
-                            const giftedAud = {
-                                audio: { url: 'https://files.giftedtech.web.id/audio/Tm7502728882089773829.mp3' },
-                                mimetype: 'audio/mpeg',
-                                ptt: true,
-                                contextInfo: {
-                                    mentionedJid: [Gifted.user.id],
-                                    forwardingScore: 5,
-                                    isForwarded: true,
-                                    forwardedNewsletterMessageInfo: {
-                                        newsletterJid: '120363408839929349@newsletter',
-                                        newsletterName: "GIFTED-TECH",
-                                        serverMessageId: 143
-                                    }
-                                }
-                            };
-                            await Gifted.sendMessage(Gifted.user.id, giftedAud, { quoted: Sess });
-                        } catch (messageError) {
-                            console.error("Message send error:", messageError);
-                        }
+                            }
+                        });
 
                         await delay(2000);
                         await Gifted.ws.close();
@@ -206,7 +134,7 @@ Use the Quoted Session ID to Deploy your Bot.
                     } finally {
                         await cleanUpSession();
                     }
-                    
+
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
                     console.log("Reconnecting...");
                     await delay(5000);
